@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="EmployeeServiceDesk.Application/EmployeeServiceDesk.Application.csproj" />
+  <Project Path="EmployeeServiceDesk.Domain/EmployeeServiceDesk.Domain.csproj" />
+  <Project Path="EmployeeServiceDesk.Infrastructure/EmployeeServiceDesk.Infrastructure.csproj" />
+  <Project Path="EmployeeServiceDesk/EmployeeServiceDesk.csproj" />
+</Solution>
