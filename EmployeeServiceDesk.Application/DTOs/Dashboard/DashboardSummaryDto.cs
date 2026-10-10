@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EmployeeServiceDesk.Application.DTOs
+namespace EmployeeServiceDesk.Application.DTOs.Dashboard
 {
     public class DashboardSummaryDto
     {

@@ -1,5 +1,6 @@
 ﻿
 using EmployeeServiceDesk.Application.DTOs;
+using EmployeeServiceDesk.Application.DTOs.Dashboard;
 using EmployeeServiceDesk.Application.ServiceInterface;
 using EmployeeServiceDesk.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
