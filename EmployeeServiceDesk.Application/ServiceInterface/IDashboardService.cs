@@ -1,5 +1,4 @@
-﻿using EmployeeServiceDesk.Application.DTOs;
-
+﻿using EmployeeServiceDesk.Application.DTOs.Dashboard;
 using System.Threading;
 using System.Threading.Tasks;
 

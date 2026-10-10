@@ -1,6 +1,5 @@
 ﻿using EmployeeServiceDesk.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace EmployeeServiceDesk.Infrastructure.Data;
 
@@ -12,16 +11,22 @@ public class ApplicationDbContext : DbContext
     {
     }
 
+    // Asset Management
     public DbSet<Asset> Assets => Set<Asset>();
-
     public DbSet<AssetType> AssetTypes => Set<AssetType>();
-
     public DbSet<AssetAssignment> AssetAssignments => Set<AssetAssignment>();
+
+    // Feedback Management
+    public DbSet<Feedback> FeedbackEntries => Set<Feedback>();
+
+    // Audit Management
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        // Asset Type Configuration
         modelBuilder.Entity<AssetType>(entity =>
         {
             entity.HasKey(x => x.AssetTypeId);
@@ -39,6 +44,7 @@ public class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        // Asset Configuration
         modelBuilder.Entity<Asset>(entity =>
         {
             entity.HasKey(x => x.AssetId);
@@ -70,6 +76,7 @@ public class ApplicationDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        // Asset Assignment Configuration
         modelBuilder.Entity<AssetAssignment>(entity =>
         {
             entity.HasKey(x => x.AssetAssignmentId);
@@ -82,6 +89,65 @@ public class ApplicationDbContext : DbContext
                 x.AssetId,
                 x.EmployeeId
             });
+        });
+
+        // Feedback Configuration
+        modelBuilder.Entity<Feedback>(entity =>
+        {
+            entity.HasKey(x => x.FeedbackId);
+
+            entity.Property(x => x.EmployeeName)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.Property(x => x.EmployeeEmail)
+                .HasMaxLength(256);
+
+            entity.Property(x => x.Category)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.Property(x => x.Rating)
+                .IsRequired();
+
+            entity.Property(x => x.Comments)
+                .IsRequired()
+                .HasMaxLength(2000);
+
+            entity.Property(x => x.Status)
+                .IsRequired()
+                .HasMaxLength(30);
+
+            entity.Property(x => x.CreatedAtUtc)
+                .IsRequired();
+        });
+
+        // Audit Log Configuration
+        modelBuilder.Entity<AuditLog>(entity =>
+        {
+            entity.HasKey(x => x.AuditLogId);
+
+            entity.Property(x => x.Action)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.Property(x => x.EntityName)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.Property(x => x.EntityId)
+                .HasMaxLength(100);
+
+            entity.Property(x => x.PerformedBy)
+                .HasMaxLength(256);
+
+            entity.Property(x => x.Details)
+                .HasMaxLength(2000);
+
+            entity.Property(x => x.OccurredAtUtc)
+                .IsRequired();
+
+            entity.HasIndex(x => x.OccurredAtUtc);
         });
     }
 }

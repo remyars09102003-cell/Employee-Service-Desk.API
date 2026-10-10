@@ -1,3 +1,4 @@
+
 using EmployeeServiceDesk.Application.ServiceInterface;
 using EmployeeServiceDesk.Application.Services;
 using EmployeeServiceDesk.Domain.RepositoryInterface;
@@ -29,6 +30,14 @@ namespace EmployeeServiceDesk
 
             // Dashboard service
             builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+            // Feedback and Audit repositories
+            builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+            builder.Services.AddScoped<IAuditRepository, AuditRepository>();
+
+            // Feedback and Audit services
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+            builder.Services.AddScoped<IAuditService, AuditService>();
 
             // Swagger and OpenAPI
             builder.Services.AddEndpointsApiExplorer();
