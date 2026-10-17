@@ -15,6 +15,21 @@ namespace EmployeeServiceDesk
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Register controllers
+            builder.Services.AddControllers();
+
+            // Configure SQL Server database
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")
+                ));
+
+            // Asset Management
+            builder.Services.AddScoped<IAssetService, AssetService>();
+            builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+
+            // Dashboard service
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
             // Add controllers
             builder.Services.AddControllers();
 
@@ -32,9 +47,17 @@ namespace EmployeeServiceDesk
             builder.Services.AddScoped<IKnowledgeArticleService, KnowledgeArticleService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
 
-            //Email
-            builder.Services.AddScoped<IEmailService, EmailService>();
-            // OpenAPI
+            // Feedback and Audit repositories
+            builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+            builder.Services.AddScoped<IAuditRepository, AuditRepository>();
+
+            // Feedback and Audit services
+            builder.Services.AddScoped<IFeedbackService, FeedbackService>();
+            builder.Services.AddScoped<IAuditService, AuditService>();
+
+            // Swagger and OpenAPI
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
             builder.Services.AddOpenApi();
 
             // CORS for Angular
@@ -55,6 +78,8 @@ namespace EmployeeServiceDesk
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();

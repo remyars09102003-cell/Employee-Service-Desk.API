@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="Mapper\" />
-    <Folder Include="Services\" />
-    <Folder Include="ServiceInterface\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeServiceDesk.Domain\EmployeeServiceDesk.Domain.csproj" />
   </ItemGroup>
 
 </Project>
