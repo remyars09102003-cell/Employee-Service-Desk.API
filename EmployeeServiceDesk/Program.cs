@@ -1,34 +1,72 @@
+using EmployeeServiceDesk.Application.Mapper;
+using EmployeeServiceDesk.Application.ServiceInterface;
+using EmployeeServiceDesk.Application.Services;
+using EmployeeServiceDesk.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
-namespace EmployeeServiceDesk
-{
-    public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+// Controllers
+builder.Services.AddControllers();
+
+// Infrastructure: database, repositories and AutoMapper
+builder.Services.AddInfrastructure(builder.Configuration);
+
+// Application services
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+// JWT configuration
+string jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT key is missing.");
+
+string jwtIssuer = builder.Configuration["Jwt:Issuer"]
+    ?? throw new InvalidOperationException("JWT issuer is missing.");
+
+string jwtAudience = builder.Configuration["Jwt:Audience"]
+    ?? throw new InvalidOperationException("JWT audience is missing.");
+
+// Authentication
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+        options.TokenValidationParameters =
+            new TokenValidationParameters
             {
-                app.MapOpenApi();
-            }
+                ValidateIssuer = true,
+                ValidIssuer = jwtIssuer,
 
-            app.UseHttpsRedirection();
+                ValidateAudience = true,
+                ValidAudience = jwtAudience,
 
-            app.UseAuthorization();
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtKey)),
 
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromSeconds(30)
+            };
+    });
 
-            app.MapControllers();
+// Authorization
+builder.Services.AddAuthorization();
 
-            app.Run();
-        }
-    }
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
