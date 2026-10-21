@@ -1,6 +1,6 @@
 <Solution>
-  <Project Path="EmployeeServiceDesk.Application/EmployeeServiceDesk.Application.csproj" />
-  <Project Path="EmployeeServiceDesk.Domain/EmployeeServiceDesk.Domain.csproj" />
-  <Project Path="EmployeeServiceDesk.Infrastructure/EmployeeServiceDesk.Infrastructure.csproj" />
-  <Project Path="EmployeeServiceDesk/EmployeeServiceDesk.csproj" />
+  <Project Path="../StudentManagementSystem/ServiceDeskManagement_Member2_Complete/full/src/ServiceDesk.API/EmployeeServiceDesk.API.csproj" />
+  <Project Path="../StudentManagementSystem/ServiceDeskManagement_Member2_Complete/full/src/ServiceDesk.Application/EmployeeServiceDesk.Application.csproj" />
+  <Project Path="../StudentManagementSystem/ServiceDeskManagement_Member2_Complete/full/src/ServiceDesk.Domain/EmployeeServiceDesk.Domain.csproj" />
+  <Project Path="../StudentManagementSystem/ServiceDeskManagement_Member2_Complete/full/src/ServiceDesk.Infrastructure/EmployeeServiceDesk.Infrastructure.csproj" />
 </Solution>
