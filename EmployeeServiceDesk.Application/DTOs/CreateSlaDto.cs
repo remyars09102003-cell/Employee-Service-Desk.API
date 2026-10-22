@@ -1,0 +1,14 @@
+﻿using EmployeeServiceDesk.Domain.Enums;
+
+namespace EmployeeServiceDesk.Application.DTOs.SLA;
+
+public class CreateSlaDto
+{
+    public string Name { get; set; } = string.Empty;
+
+    public Priority Priority { get; set; }
+
+    public int ResponseTimeMinutes { get; set; }
+
+    public int ResolutionTimeMinutes { get; set; }
+}
