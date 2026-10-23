@@ -1,4 +1,4 @@
-﻿namespace EmployeeServiceDesk.Domain.Enums;
+﻿namespace ServiceDesk.Domain.Enums;
 
 public enum NotificationType
 {
@@ -6,8 +6,8 @@ public enum NotificationType
     TicketAssigned = 2,
     StatusChanged = 3,
     PriorityChanged = 4,
-    SLARisk = 5,
-    SLABreach = 6,
+    SlaRisk = 5,
+    SlaBreached = 6,
     TicketResolved = 7,
     TicketClosed = 8
 }

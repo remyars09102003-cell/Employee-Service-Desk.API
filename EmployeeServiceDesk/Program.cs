@@ -1,3 +1,8 @@
+using System.Text.Json.Serialization;
+using Serilog;
+using ServiceDesk.API.Middleware;
+using ServiceDesk.Application;
+using ServiceDesk.Infrastructure;
 using EmployeeServiceDesk.Application.Mapper;
 using EmployeeServiceDesk.Application.ServiceInterface;
 using EmployeeServiceDesk.Application.Services;
@@ -24,8 +29,17 @@ namespace EmployeeServiceDesk
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Register controllers
-            builder.Services.AddControllers();
+builder.Host.UseSerilog((context, logger) => logger
+    .ReadFrom.Configuration(context.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console());
+
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
             // Configure SQL Server database
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -68,6 +82,8 @@ namespace EmployeeServiceDesk
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddOpenApi();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
             // CORS for Angular
             builder.Services.AddCors(options =>
@@ -83,6 +99,14 @@ namespace EmployeeServiceDesk
 
             var app = builder.Build();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseSerilogRequestLogging();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
             // Configure HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
@@ -93,10 +117,14 @@ namespace EmployeeServiceDesk
 
 app.UseHttpsRedirection();
 
+// TODO(Member 1): app.UseAuthentication(); once JWT is wired up.
+app.UseAuthorization();
             app.UseCors("Angularpolicy");
 
             app.UseAuthorization();
 
-            app.MapControllers();
+app.MapControllers();
+app.Run();
 
+public partial class Program { } // for integration tests
 app.Run();
