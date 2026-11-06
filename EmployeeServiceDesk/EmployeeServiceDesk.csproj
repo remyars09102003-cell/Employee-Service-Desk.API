@@ -23,4 +23,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeServiceDesk.Application\EmployeeServiceDesk.Application.csproj" />
+    <ProjectReference Include="..\EmployeeServiceDesk.Domain\EmployeeServiceDesk.Domain.csproj" />
+    <ProjectReference Include="..\EmployeeServiceDesk.Infrastructure\EmployeeServiceDesk.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
